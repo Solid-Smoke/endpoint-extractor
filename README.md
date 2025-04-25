@@ -27,7 +27,7 @@
 
 1. Clone or download this repository:
    ```bash
-   git clone https://github.com/your-username/endpoint-extractor.git
+   git clone https://github.com/shamo0/endpoint-extractor.git
    ```
 
 2. Go to chrome://extensions in your browser.
