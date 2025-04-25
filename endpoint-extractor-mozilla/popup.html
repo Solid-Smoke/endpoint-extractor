@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Endpoints Found</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 16px;
+      width: 320px;
+      background-color: #f5f5f5;
+    }
+
+    h2 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    #copy-all {
+      display: block;
+      margin-bottom: 12px;
+      padding: 6px 12px;
+      font-size: 13px;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    #copy-all:hover {
+      background-color: #005fa3;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: #ffffff;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      max-height: 300px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Extracted Endpoints</h2>
+  <button id="copy-all">Copy All</button>
+  <pre id="endpoints">Loading...</pre>
+  <script src="popup.js"></script>
+</body>
+</html>
