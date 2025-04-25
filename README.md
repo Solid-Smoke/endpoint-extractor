@@ -1,6 +1,6 @@
-# 🛰️ Endpoint Extractor – Chrome Extension
+# 🛰️ Endpoint Extractor – Chrome & Mozilla Extensions
 
-**Endpoint Extractor** is a lightweight Chrome extension that extracts all endpoints (URLs) found within a web page and its loaded scripts. It's useful for developers, bug bounty hunters, and penetration testers who want quick visibility into API paths, static file endpoints, and more.
+**Endpoint Extractor** is a lightweight extension that extracts all endpoints (URLs) found within a web page and its loaded scripts. It's useful for developers, bug bounty hunters, and penetration testers who want quick visibility into API paths, static file endpoints, and more.
 
 ---
 
@@ -21,7 +21,7 @@
 
 ---
 
-## 🚀 Installation
+## 🚀 Installation (Chrome)
 
 ### Option 1: Manual Load (Developer Mode)
 
@@ -30,7 +30,7 @@
    git clone https://github.com/shamo0/endpoint-extractor.git
    ```
 
-2. Go to chrome://extensions in your browser.
+2. Open Chrome & Go to chrome://extensions in your browser.
 
 3. Enable Developer mode (top right).
 
@@ -38,6 +38,25 @@
 
 5. Click the extension icon → see all discovered endpoints.
 
+## 🚀 Installation (Mozilla)
 
+### Option 1: Manual Load (Developer Mode)
+
+1. Clone or download this repository:
+   ```bash
+   git clone https://github.com/shamo0/endpoint-extractor.git
+   ```
+
+2. Open Firefox and go to about:debugging.
+
+3. Click "This Firefox" on the left.
+
+4. Click "Load Temporary Add-on…".
+
+5. Select any file in endpoint-extractor-mozilla folder (e.g., manifest.json).
+
+6. Your extension should now appear in the toolbar — click to test.
+
+   
 ## Privacy & Permissions
 This extension does not collect, store, or transmit any data. It runs entirely in the user's browser and uses only activeTab and scripting permissions to inspect content
