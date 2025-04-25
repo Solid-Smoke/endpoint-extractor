@@ -34,7 +34,7 @@
 
 3. Enable Developer mode (top right).
 
-4. Click "Load unpacked" and select the endpoint-extractor/ folder.
+4. Click "Load unpacked" and select the endpoint-extractor-chrome/ folder.
 
 5. Click the extension icon → see all discovered endpoints.
 
