@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const copyBtn = document.getElementById("copy-all");
+  const filterInput = document.getElementById('filter');
   const output = document.getElementById("endpoints");
 
   chrome.tabs.executeScript({ code: `(${extractEndpoints.toString()})()` }, (results) => {
@@ -11,14 +12,30 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    output.textContent = endpoints.join('\n');
+    const applyFilter = () => {
+      const keyword = filterInput.value.trim().toLowerCase();
+      const filtered = endpoints.filter(endpoint =>
+        endpoint.toLowerCase().includes(keyword)
+      );
 
-    copyBtn.onclick = () => {
-      navigator.clipboard.writeText(endpoints.join('\n')).then(() => {
-        copyBtn.textContent = "Copied!";
-        setTimeout(() => copyBtn.textContent = "Copy All", 1500);
-      });
+      if (!filtered.length) {
+        output.textContent = "No matching endpoints found.";
+        copyBtn.style.display = "none";
+      } else {
+        output.textContent = filtered.join("\n");
+        copyBtn.style.display = "block";
+      }
+
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(filtered.join("\n")).then(() => {
+          copyBtn.textContent = "Copied!";
+          setTimeout(() => copyBtn.textContent = "Copy All", 1500);
+        });
+      };
     };
+
+    applyFilter();
+    filterInput.addEventListener("input", applyFilter);
   });
 });
 

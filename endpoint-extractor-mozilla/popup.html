@@ -16,6 +16,16 @@
       color: #333;
     }
 
+    #filter {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 6px 8px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
     #copy-all {
       display: block;
       margin-bottom: 12px;
@@ -49,6 +59,7 @@
 </head>
 <body>
   <h2>Extracted Endpoints</h2>
+  <input type="text" id="filter" placeholder="Filter endpoints..." />
   <button id="copy-all">Copy All</button>
   <pre id="endpoints">Loading...</pre>
   <script src="popup.js"></script>
