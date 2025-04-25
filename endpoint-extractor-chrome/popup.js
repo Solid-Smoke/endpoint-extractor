@@ -7,6 +7,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       (injectionResults) => {
         const endpoints = injectionResults[0].result;
         const container = document.getElementById('endpoints');
+        const filterInput = document.getElementById('filter');
         const copyBtn = document.getElementById('copy-all');
   
         if (!endpoints.length) {
@@ -15,14 +16,30 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
           return;
         }
   
-        container.textContent = endpoints.join('\n');
+        const applyFilter = () => {
+          const keyword = filterInput.value.trim().toLowerCase();
+          const filtered = endpoints.filter(endpoint =>
+            endpoint.toLowerCase().includes(keyword)
+          );
   
-        copyBtn.onclick = () => {
-          navigator.clipboard.writeText(endpoints.join('\n')).then(() => {
-            copyBtn.textContent = 'Copied!';
-            setTimeout(() => copyBtn.textContent = 'Copy All', 1500);
-          });
+          if (!filtered.length) {
+            container.textContent = 'No matching endpoints found.';
+            copyBtn.style.display = 'none';
+          } else {
+            container.textContent = filtered.join('\n');
+            copyBtn.style.display = 'block';
+          }
+  
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(filtered.join('\n')).then(() => {
+              copyBtn.textContent = 'Copied!';
+              setTimeout(() => (copyBtn.textContent = 'Copy All'), 1500);
+            });
+          };
         };
+  
+        filterInput.addEventListener('input', applyFilter);
+        applyFilter();
       }
     );
   });
