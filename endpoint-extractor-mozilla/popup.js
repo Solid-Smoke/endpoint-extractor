@@ -2,9 +2,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const copyBtn = document.getElementById("copy-all");
   const filterInput = document.getElementById('filter');
   const output = document.getElementById("endpoints");
+  const pathToggle = document.getElementById('path-toggle');
+  let cleanPath = '';
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const currentTabUrl = new URL(tabs[0].url);
+    cleanPath = currentTabUrl.pathname;
+  });
 
   chrome.tabs.executeScript({ code: `(${extractEndpoints.toString()})()` }, (results) => {
     const endpoints = results && results[0] ? results[0] : [];
+    
 
     if (!endpoints.length) {
       output.textContent = "No endpoints found.";
@@ -14,9 +22,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const applyFilter = () => {
       const keyword = filterInput.value.trim().toLowerCase();
-      const filtered = endpoints.filter(endpoint =>
+      const onlyCurrentPath = pathToggle.checked;
+      let filtered = endpoints.filter(endpoint =>
         endpoint.toLowerCase().includes(keyword)
       );
+
+      if (onlyCurrentPath) {
+        filtered = filtered.filter(endpoint =>
+          endpoint.startsWith(cleanPath)
+        );
+      }
 
       if (!filtered.length) {
         output.textContent = "No matching endpoints found.";
@@ -36,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     applyFilter();
     filterInput.addEventListener("input", applyFilter);
+    pathToggle.addEventListener("change", applyFilter);
   });
 });
 
