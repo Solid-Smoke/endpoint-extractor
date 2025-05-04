@@ -9,6 +9,10 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         const container = document.getElementById('endpoints');
         const filterInput = document.getElementById('filter');
         const copyBtn = document.getElementById('copy-all');
+        const pathToggle = document.getElementById('path-toggle');
+        const currentTabUrl = new URL(tabs[0].url);
+        const cleanPath = currentTabUrl.pathname;
+        console.log(cleanPath);
   
         if (!endpoints.length) {
           container.textContent = 'No endpoints found.';
@@ -18,9 +22,16 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   
         const applyFilter = () => {
           const keyword = filterInput.value.trim().toLowerCase();
-          const filtered = endpoints.filter(endpoint =>
+          const onlyCurrentPath = pathToggle.checked;
+          let filtered = endpoints.filter(endpoint =>
             endpoint.toLowerCase().includes(keyword)
           );
+
+          if (onlyCurrentPath) {
+            filtered = filtered.filter(endpoint =>
+              endpoint.startsWith(cleanPath)
+            );
+          }
   
           if (!filtered.length) {
             container.textContent = 'No matching endpoints found.';
@@ -39,6 +50,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         };
   
         filterInput.addEventListener('input', applyFilter);
+        pathToggle.addEventListener('change', applyFilter);
         applyFilter();
       }
     );
