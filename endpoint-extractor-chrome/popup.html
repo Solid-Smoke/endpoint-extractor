@@ -16,6 +16,26 @@
       color: #333;
     }
 
+    #filter {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 6px 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #path-toggle {
+      margin-right: 5px;
+    }
+
+    label {
+      font-size: 13px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
     #copy-all {
       display: block;
       margin-bottom: 12px;
@@ -49,6 +69,11 @@
 </head>
 <body>
   <h2>Extracted Endpoints</h2>
+  <input type="text" id="filter" placeholder="Filter endpoints..." />
+  <label>
+    <input type="checkbox" id="path-toggle" />
+    Show only endpoints matching current path
+  </label>
   <button id="copy-all">Copy All</button>
   <pre id="endpoints">Loading...</pre>
   <script src="popup.js"></script>

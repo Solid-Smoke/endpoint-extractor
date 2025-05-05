@@ -7,7 +7,12 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       (injectionResults) => {
         const endpoints = injectionResults[0].result;
         const container = document.getElementById('endpoints');
+        const filterInput = document.getElementById('filter');
         const copyBtn = document.getElementById('copy-all');
+        const pathToggle = document.getElementById('path-toggle');
+        const currentTabUrl = new URL(tabs[0].url);
+        const cleanPath = currentTabUrl.pathname;
+        console.log(cleanPath);
   
         if (!endpoints.length) {
           container.textContent = 'No endpoints found.';
@@ -15,14 +20,38 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
           return;
         }
   
-        container.textContent = endpoints.join('\n');
+        const applyFilter = () => {
+          const keyword = filterInput.value.trim().toLowerCase();
+          const onlyCurrentPath = pathToggle.checked;
+          let filtered = endpoints.filter(endpoint =>
+            endpoint.toLowerCase().includes(keyword)
+          );
+
+          if (onlyCurrentPath) {
+            filtered = filtered.filter(endpoint =>
+              endpoint.startsWith(cleanPath)
+            );
+          }
   
-        copyBtn.onclick = () => {
-          navigator.clipboard.writeText(endpoints.join('\n')).then(() => {
-            copyBtn.textContent = 'Copied!';
-            setTimeout(() => copyBtn.textContent = 'Copy All', 1500);
-          });
+          if (!filtered.length) {
+            container.textContent = 'No matching endpoints found.';
+            copyBtn.style.display = 'none';
+          } else {
+            container.textContent = filtered.join('\n');
+            copyBtn.style.display = 'block';
+          }
+  
+          copyBtn.onclick = () => {
+            navigator.clipboard.writeText(filtered.join('\n')).then(() => {
+              copyBtn.textContent = 'Copied!';
+              setTimeout(() => (copyBtn.textContent = 'Copy All'), 1500);
+            });
+          };
         };
+  
+        filterInput.addEventListener('input', applyFilter);
+        pathToggle.addEventListener('change', applyFilter);
+        applyFilter();
       }
     );
   });

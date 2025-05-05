@@ -1,9 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
   const copyBtn = document.getElementById("copy-all");
+  const filterInput = document.getElementById('filter');
   const output = document.getElementById("endpoints");
+  const pathToggle = document.getElementById('path-toggle');
+  let cleanPath = '';
+
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const currentTabUrl = new URL(tabs[0].url);
+    cleanPath = currentTabUrl.pathname;
+  });
 
   chrome.tabs.executeScript({ code: `(${extractEndpoints.toString()})()` }, (results) => {
     const endpoints = results && results[0] ? results[0] : [];
+    
 
     if (!endpoints.length) {
       output.textContent = "No endpoints found.";
@@ -11,14 +20,38 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    output.textContent = endpoints.join('\n');
+    const applyFilter = () => {
+      const keyword = filterInput.value.trim().toLowerCase();
+      const onlyCurrentPath = pathToggle.checked;
+      let filtered = endpoints.filter(endpoint =>
+        endpoint.toLowerCase().includes(keyword)
+      );
 
-    copyBtn.onclick = () => {
-      navigator.clipboard.writeText(endpoints.join('\n')).then(() => {
-        copyBtn.textContent = "Copied!";
-        setTimeout(() => copyBtn.textContent = "Copy All", 1500);
-      });
+      if (onlyCurrentPath) {
+        filtered = filtered.filter(endpoint =>
+          endpoint.startsWith(cleanPath)
+        );
+      }
+
+      if (!filtered.length) {
+        output.textContent = "No matching endpoints found.";
+        copyBtn.style.display = "none";
+      } else {
+        output.textContent = filtered.join("\n");
+        copyBtn.style.display = "block";
+      }
+
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(filtered.join("\n")).then(() => {
+          copyBtn.textContent = "Copied!";
+          setTimeout(() => copyBtn.textContent = "Copy All", 1500);
+        });
+      };
     };
+
+    applyFilter();
+    filterInput.addEventListener("input", applyFilter);
+    pathToggle.addEventListener("change", applyFilter);
   });
 });
 
